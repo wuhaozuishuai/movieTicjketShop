@@ -2,18 +2,17 @@
 
 import 'dart:async';
 import 'dart:developer';
-// import 'dart:html';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../service/service_method.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'dart:convert';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import '../routers/application.dart';
 import '../pages/publicWidget/movie_bar.dart';
 import '../service/service_method.dart';
+import 'publicWidget/TextScreen.dart';
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -85,21 +84,6 @@ class _HomePageState extends State<HomePage>
               List<Map> hotMovieList2 = (data['data']['floor2'] as List).cast();
               List<Map> hotMovieList3 = (data['data']['floor3'] as List).cast();
               List<Map> hotMovieList4 = (data['data']['floor4'] as List).cast();
-
-              // List<Map> navigator = (data['data']['category'] as List).cast();
-              // String adPicture =
-              //     data['data']['advertesPicture']['PICTURE_ADDRESS'];
-              // String leaderImage = data['data']['shopInfo']['leaderImage'];
-              // String leaderPhone = data['data']['shopInfo']['leaderPhone'];
-              // List<Map> recommendList =
-              //     (data['data']['recommend'] as List).cast();
-              // String floot1Title = data['data']['floor1Pic']['PICTURE_ADDRESS'];
-              // String floot2Title = data['data']['floor2Pic']['PICTURE_ADDRESS'];
-              // String floot3Title = data['data']['floor3Pic']['PICTURE_ADDRESS'];
-              // List<Map> floor1 = (data['data']['floor1'] as List).cast();
-              // List<Map> floor2 = (data['data']['floor2'] as List).cast();
-              // List<Map> floor3 = (data['data']['floor3'] as List).cast();
-
               return EasyRefresh(
                   footer: ClassicalFooter(
                     key: _globalKey,
@@ -131,20 +115,6 @@ class _HomePageState extends State<HomePage>
         ));
   }
 
-  // void _getHotGoods() {
-  //   var formData = {'page': page};
-  //   request('homePageBelowConten', formData: formData).then((value) {
-  //     var data = json.decode(value.toString());
-  //     List<Map> newGoodsList = (data['data'] as List).cast();
-  //     setState(() {
-  //       print(newGoodsList);
-  //       hotGoodsList.addAll(newGoodsList);
-  //       print(newGoodsList);
-  //       page++;
-  //     });
-  //   });
-  // }
-/**/
   //TODO 火爆专区标题
   Widget hotTitle = Container(
     margin: EdgeInsets.only(top: 10),
@@ -215,36 +185,9 @@ class _HomePageState extends State<HomePage>
     );
   }
 }
-//TODO 搜索结果页面
-class TextScreen extends StatelessWidget {
 
-  final String s;
-  TextScreen({Key key, @required this.s}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    // Use the Todo to create our UI
-    return new Scaffold(
-      appBar:  AppBar(
-        title: Text("搜索结果内容"),
-      ),
-      body: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Center(
-            child: Text(s),
-          )
-      ),
-    );
-  }
-}
-
-var nameList = [
-  "绿皮南瓜","番茄", "白菜", "胡萝卜","土豆","甜菜","白甜"
-];
 var data;
 void getSearchList(query) async{
-
-  print(query);
   await myGetRequest('http://49.234.103.109:18080/selectMovie'+'?para='+query).then((value){
      data = json.decode(value.toString());
   });
@@ -289,9 +232,7 @@ class SearchBarDelegate extends SearchDelegate<String>{
     getSearchList(query);
     Timer(Duration(seconds: 2), (){
       // Do something
-      print('====查询到结果');
       List<Map> resultList = (data['data'] as List).cast();
-      print(data);
     });
 
 
@@ -333,7 +274,7 @@ class SearchBarDelegate extends SearchDelegate<String>{
               Navigator.push(
                 context,
                 new MaterialPageRoute(
-                  builder: (context) =>  TextScreen(s: query),
+                  builder: (context) =>  TextScreen(data: data['data'][index],s: query),
                   //TextScreen()用于展示我们想要通过搜索到达的页面，
                   //这里用到了构造函数传值。
                 ),

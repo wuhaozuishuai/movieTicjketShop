@@ -6,10 +6,11 @@ const servicePath = {
   'getMallGoods':serviceUrl+'wxmini/getMallGoods',//商品分类的商品列表
 };
 
-const myServiceUrl = 'http://www.yxy.pink:18080/';
+const myServiceUrl = 'http://49.234.103.109:18080/';
 const myServicePath = {
   'index':myServiceUrl+'index',//所有电影内容
   'floor':myServiceUrl+'floor',//首页
   'selectMovie':myServiceUrl+'selectMovie',//搜索电影
+  'selectAllMovie':myServiceUrl+'selectAllMovie',//全部电影
 };
 

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import './pages/index_page.dart';
 import 'package:provider/provider.dart';
 import './provider/counter.dart';
 import './provider/child_category.dart';
 import './provider/category_goods_list.dart';
+import './provider/seat_provider.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter_shop/routers/application.dart';
 import 'package:flutter_shop/routers/routers.dart';
@@ -18,15 +20,13 @@ void main() {
   // );
 
   debugPaintSizeEnabled = !true;
-  runApp(
-
-      MultiProvider(
-
+  runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider<ChildCategory>.value(value: ChildCategory()),
       ChangeNotifierProvider<Counter>.value(value: Counter(0)),
       ChangeNotifierProvider<CategoryGoodsListProvider>.value(
           value: CategoryGoodsListProvider()),
+      ChangeNotifierProvider<SeatP>.value(value: SeatP())
       // Provider<Counter>(create: (_)=>Counter(0))
     ],
     child: MyApp(),

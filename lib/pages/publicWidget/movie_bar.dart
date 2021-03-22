@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'TextScreen.dart';
 
 class MovieBar extends StatelessWidget {
   List<Map> msg;
@@ -18,7 +19,7 @@ class MovieBar extends StatelessWidget {
             picW(msg[index]['image']),
             _title(msg[index]['title']),
             _scroe(msg[index]['score']),
-            _button(index)
+            _button(context,msg[index])
           ],
         ),
     );
@@ -47,7 +48,7 @@ class MovieBar extends StatelessWidget {
       overflow: TextOverflow.ellipsis,
       style: TextStyle(
         color: Colors.black,
-        fontSize: ScreenUtil().setSp(20),
+        fontSize: ScreenUtil().setSp(24),
       ),
     );
   }
@@ -57,25 +58,36 @@ class MovieBar extends StatelessWidget {
       "评分：${scroe}",
       style: TextStyle(
         color: Colors.black26,
-        fontSize: ScreenUtil().setSp(15),
+        fontSize: ScreenUtil().setSp(20),
       ),
     );
   }
   // 购片按钮
-  Widget _button(index){
+  Widget _button(context,msg){
+
     return SizedBox(
-      width: ScreenUtil().setWidth(100),
+      width: ScreenUtil().setWidth(130),
+      height: ScreenUtil().setHeight(50),
       child:  FlatButton (
         child: Text(
-          '购票',
+          '查看',
         ),
-        color: Colors.red,
+        color: Color.fromRGBO(240, 60, 55, 1 ),
         textColor: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         onPressed: (){
-
+          Navigator.push(
+            context,
+            new MaterialPageRoute(
+              builder: (context) =>  TextScreen(data: msg),
+              //TextScreen()用于展示我们想要通过搜索到达的页面，
+              //这里用到了构造函数传值。
+            ),
+          );
+            print('++++点击了购买');
+            // print(msg);
         },
       ),
     );

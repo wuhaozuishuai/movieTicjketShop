@@ -16,13 +16,14 @@ class IndexPage extends StatefulWidget {
 class _IndexPageState extends State<IndexPage> {
   //存储底部导航icon
   final List<BottomNavigationBarItem> bottomTabs = [
+
     BottomNavigationBarItem(
       icon: Icon(CupertinoIcons.home),
       title: Text('首页')
     ),
     BottomNavigationBarItem(
-        icon: Icon(CupertinoIcons.search),
-        title: Text('分类')
+        icon: Icon(CupertinoIcons.arrowtriangle_left_square),
+        title: Text('电影')
     ),
     BottomNavigationBarItem(
         icon: Icon(CupertinoIcons.shopping_cart),
@@ -54,7 +55,7 @@ class _IndexPageState extends State<IndexPage> {
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context, width: 750, height: 1334, allowFontScaling: false);
+    ScreenUtil.init(context, width: 800, height: 1334, allowFontScaling: false);
     return Scaffold(
       // backgroundColor: Color.fromRGBO(244, 245, 245, 1.0),
       bottomNavigationBar: BottomNavigationBar(
