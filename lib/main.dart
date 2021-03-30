@@ -10,6 +10,8 @@ import './provider/seat_provider.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter_shop/routers/application.dart';
 import 'package:flutter_shop/routers/routers.dart';
+import 'package:flutter_shop/pages/login_page.dart';
+import 'package:flutter_shop/provider/user_info_provider.dart';
 
 void main() {
   //单个状态管理
@@ -22,11 +24,12 @@ void main() {
   debugPaintSizeEnabled = !true;
   runApp(MultiProvider(
     providers: [
-      ChangeNotifierProvider<ChildCategory>.value(value: ChildCategory()),
+      // ChangeNotifierProvider<ChildCategory>.value(value: ChildCategory()),
       ChangeNotifierProvider<Counter>.value(value: Counter(0)),
       ChangeNotifierProvider<CategoryGoodsListProvider>.value(
           value: CategoryGoodsListProvider()),
-      ChangeNotifierProvider<SeatP>.value(value: SeatP())
+      ChangeNotifierProvider<SeatP>.value(value: SeatP()),
+      ChangeNotifierProvider<UserInfoP>.value(value: UserInfoP())
       // Provider<Counter>(create: (_)=>Counter(0))
     ],
     child: MyApp(),
@@ -46,8 +49,9 @@ class MyApp extends StatelessWidget {
         onGenerateRoute: Application.router.generator,
         title: 'fly电影',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(primaryColor: Colors.redAccent),
+        theme: ThemeData(primaryColor: Color.fromRGBO(240, 60, 55, 1)),
         home: IndexPage(),
+        // home: RootPage(),
       ),
     );
   }

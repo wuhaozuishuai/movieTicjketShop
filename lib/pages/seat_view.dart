@@ -51,3 +51,101 @@ class _SeatViewState extends State<SeatView>
     );
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// class MemberPage extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     Map userInfoList =
+//         Provider.of<UserInfoP>(context, listen: false).userInfoList;
+//
+//     print(userInfoList);
+//     return Scaffold(
+//       appBar: AppBar(
+//         elevation: 0,
+//       ),
+//       body: Center(
+//         child: Container(
+//           width: double.infinity,
+//           height: ScreenUtil().setHeight(1200),
+//           child: Column(
+//             children: [
+//               Container(
+//                 width: double.infinity,
+//                 height: ScreenUtil().setHeight(250),
+//                 color: Color.fromRGBO(240, 60, 55, 1),
+//                 child: Row(
+//                   crossAxisAlignment: CrossAxisAlignment.start,
+//                   children: [
+//                     Padding(
+//                       ///圆角矩形
+//                       child: ClipRRect(
+//                         borderRadius: BorderRadius.all(Radius.circular(200)),
+//                         child: Image.asset(
+//                           "assets/images/logo.jpg",
+//                           height: 100,
+//                           width: 100,
+//                         ),
+//                       ),
+//                       padding: EdgeInsets.only(left: 14),
+//                     ),
+//                     Container(
+//                         margin: EdgeInsets.only(left: 15, top: 50),
+//                         child: InkWell(
+//                           child: Text(
+//                             userInfoList.isEmpty
+//                                 ? '立即登录'
+//                                 : '欢迎您,' +
+//                                 userInfoList["userInfo"][0]["username"],
+//                             style: TextStyle(
+//                                 color: Colors.white,
+//                                 fontSize: ScreenUtil().setSp(40)),
+//                           ),
+//                           onTap: () {
+//                             if (userInfoList.isEmpty) {
+//                               Navigator.push(
+//                                 context,
+//                                 new MaterialPageRoute(
+//                                   builder: (context) => RootPage(),
+//                                   //TextScreen()用于展示我们想要通过搜索到达的页面，
+//                                   //这里用到了构造函数传值。
+//                                 ),
+//                               );
+//                             }
+//                           },
+//                         ))
+//                   ],
+//                 ),
+//               ),
+//               Container(
+//                 child: memberMain(),
+//               )
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }

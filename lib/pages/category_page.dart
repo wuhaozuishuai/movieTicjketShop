@@ -5,9 +5,7 @@ import 'package:flutter_screenutil/screenutil.dart';
 import 'package:flutter_shop/service/service_method.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'dart:convert';
-
-import 'file:///D:/flutterProject/myshop/flutter_shop-main/lib/pages/publicWidget/TextScreen.dart';
-
+import 'package:flutter_shop/pages/publicWidget/TextScreen.dart';
 //TODO 分类页面
 class CategoryPage extends StatefulWidget {
   @override
