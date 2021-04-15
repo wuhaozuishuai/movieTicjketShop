@@ -6,6 +6,10 @@ import 'package:flutter_shop/service/service_method.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'dart:convert';
 import 'package:flutter_shop/pages/publicWidget/TextScreen.dart';
+import 'package:flutter_shop/pages/cart_dart.dart';
+import 'package:provider/provider.dart';
+import '../provider/seat_provider.dart';
+
 //TODO 分类页面
 class CategoryPage extends StatefulWidget {
   @override
@@ -33,7 +37,7 @@ class _CategoryPageState extends State<CategoryPage> {
                       SwiperDiy(swperDateList: swiper),
                       rowBar(),
                       Container(
-                        height: ScreenUtil().setHeight(760),
+                        height: ScreenUtil().setHeight(820),
                         margin: EdgeInsets.only(left: 20),
                         child: movieListWidget(movieList),
                       )
@@ -115,15 +119,12 @@ class _CategoryPageState extends State<CategoryPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.max,
-
                     children: [
                       Text(
-                          _list[index]['title'],
+                        _list[index]['title'],
                         style: TextStyle(
-                          color: Colors.black,
-                          fontSize: ScreenUtil().setSp(30)
-                        ),
-
+                            color: Colors.black,
+                            fontSize: ScreenUtil().setSp(30)),
                       ),
                       SizedBox(height: 10),
                       RichText(
@@ -131,7 +132,7 @@ class _CategoryPageState extends State<CategoryPage> {
                           TextSpan(
                               text: 'fly评分 ',
                               style: TextStyle(
-                                fontSize: ScreenUtil().setSp(24),
+                                  fontSize: ScreenUtil().setSp(24),
                                   color: Color.fromRGBO(100, 100, 100, 1))),
                           TextSpan(
                               text: _list[index]['score'],
@@ -151,22 +152,32 @@ class _CategoryPageState extends State<CategoryPage> {
                   ),
                 ),
                 Container(
-                  // decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-                  child: SizedBox(
-                    width:ScreenUtil().setWidth(130),
-                    child: FlatButton(
-                      color: Color.fromRGBO(240, 60, 55, 1),
-                      child: Text('购票'),
-                      textColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                      ),
-                      onPressed: (){
-
-                      },
+                    // decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+                    child: SizedBox(
+                  width: ScreenUtil().setWidth(130),
+                  child: FlatButton(
+                    color: Color.fromRGBO(240, 60, 55, 1),
+                    child: Text('购票'),
+                    textColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
                     ),
-                  )
-                )
+                    onPressed: () {
+                      print(_list[index]['id']);
+
+                      Provider.of<SeatP>(context, listen: false)
+                          .initP(_list[index]['id']);
+                      Navigator.push(
+                        context,
+                        new MaterialPageRoute(
+                          builder: (context) => CartPage(),
+                          //TextScreen()用于展示我们想要通过搜索到达的页面，
+                          //这里用到了构造函数传值。
+                        ),
+                      );
+                    },
+                  ),
+                ))
               ],
             ),
           ),
@@ -174,7 +185,8 @@ class _CategoryPageState extends State<CategoryPage> {
             Navigator.push(
               context,
               new MaterialPageRoute(
-                builder: (context) =>  TextScreen(data: _list[index]),
+                builder: (context) => TextScreen(data: _list[index]),
+
                 //TextScreen()用于展示我们想要通过搜索到达的页面，
                 //这里用到了构造函数传值。
               ),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../provider/seat_provider.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+import 'package:like_button/like_button.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SeatView extends StatefulWidget {
   @override
@@ -27,6 +29,7 @@ class _SeatViewState extends State<SeatView>
   @override
   Widget build(BuildContext context) {
     List<Map> _list = Provider.of<SeatP>(context).seatList;
+    print(_list);
     return Container(
       width: ScreenUtil().setWidth(700),
       height: ScreenUtil().setHeight(ScreenUtil.screenHeight),
@@ -36,44 +39,71 @@ class _SeatViewState extends State<SeatView>
             crossAxisCount: 10, crossAxisSpacing: 1, mainAxisSpacing: 1),
         itemCount: _list.length,
         itemBuilder: (context, index) {
-          return InkWell(
-            onTap: () {
-              print('点击');
-            },
-            child: Icon(
+          // return InkWell(
+          //   onTap: () {
+          //     print('点击');
+          //   },
+          //   child: Icon(
+          //       IconData(0xe613, fontFamily: 'appIconFonts'),
+          //     size: ScreenUtil().setSp(50),
+          //     color: Colors.grey,
+          //   ),
+          // );
+
+          return LikeButton(
+            size: 30,
+            likeBuilder: (bool isLiked) {
+              if (_list[index]['userId'] != null) {
+                return Icon(
+                  IconData(0xe613, fontFamily: 'appIconFonts'),
+                  color: Colors.redAccent,
+                  size: 30,
+                );
+              }
+
+              return Icon(
                 IconData(0xe613, fontFamily: 'appIconFonts'),
-              size: ScreenUtil().setSp(50),
-              color: Colors.grey,
-            ),
+                color: isLiked ? Colors.redAccent : Colors.grey,
+                size: 30,
+              );
+            },
+            onTap: (bool isLiked) async {
+              /// send your request here
+              // final bool success= await sendRequest();
+              //
+              /// if failed, you can do nothing
+              // return success? !isLiked:isLiked;
+              if (_list[index]['userId'] != null) {
+                Fluttertoast.showToast(
+                    msg: "有人啦",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0);
+                print('you人');
+              } else {
+                print(_list[index]);
+                return !isLiked;
+              }
+            },
           );
         },
       ),
     );
   }
+
+  Future<bool> onLikeButtonTapped(bool isLiked) async {
+    /// send your request here
+    // final bool success= await sendRequest();
+
+    /// if failed, you can do nothing
+    // return success? !isLiked:isLiked;
+    print('123');
+    return !isLiked;
+  }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // class MemberPage extends StatelessWidget {
 //   @override

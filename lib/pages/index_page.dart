@@ -5,8 +5,8 @@ import 'home_page.dart';
 import 'cart_dart.dart';
 import 'category_page.dart';
 import 'member_page.dart';
+import 'newUserPage.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 
 class IndexPage extends StatefulWidget {
   @override
@@ -16,35 +16,26 @@ class IndexPage extends StatefulWidget {
 class _IndexPageState extends State<IndexPage> {
   //存储底部导航icon
   final List<BottomNavigationBarItem> bottomTabs = [
-
-    BottomNavigationBarItem(
-      icon: Icon(CupertinoIcons.home),
-      title: Text('首页')
-    ),
+    BottomNavigationBarItem(icon: Icon(CupertinoIcons.home), title: Text('首页')),
     BottomNavigationBarItem(
         icon: Icon(CupertinoIcons.arrowtriangle_left_square),
-        title: Text('电影')
-    ),
+        title: Text('电影')),
+    // BottomNavigationBarItem(
+    //     icon: Icon(CupertinoIcons.shopping_cart), title: Text('购物车')),
     BottomNavigationBarItem(
-        icon: Icon(CupertinoIcons.shopping_cart),
-        title: Text('购物车')
-    ),
-    BottomNavigationBarItem(
-        icon: Icon(CupertinoIcons.profile_circled),
-        title: Text('个人中心')
-    )
+        icon: Icon(CupertinoIcons.profile_circled), title: Text('个人中心'))
   ];
 
   //存储引入的四个页面
-  final List<Widget> tabBodies  =[
+  final List<Widget> tabBodies = [
     HomePage(),
     CategoryPage(),
-    CartPage(),
-    MemberPage()
+    // CartPage(),
+    ProfileEightPage()
   ];
 
   int currentIndex = 0; //建立索引对象
-  var currentPage;//创建对应页面对象
+  var currentPage; //创建对应页面对象
 
   @override
   void initState() {
@@ -59,25 +50,17 @@ class _IndexPageState extends State<IndexPage> {
     return Scaffold(
       // backgroundColor: Color.fromRGBO(244, 245, 245, 1.0),
       bottomNavigationBar: BottomNavigationBar(
-
         type: BottomNavigationBarType.fixed,
-        currentIndex: currentIndex,//初始索引
-        items: bottomTabs,//导航对象
-        onTap: (index){
+        currentIndex: currentIndex, //初始索引
+        items: bottomTabs, //导航对象
+        onTap: (index) {
           setState(() {
             currentIndex = index;
             currentPage = tabBodies[currentIndex];
           });
         },
       ),
-      body: IndexedStack(
-        index: currentIndex,
-        children:tabBodies
-      )
-      ,
+      body: IndexedStack(index: currentIndex, children: tabBodies),
     );
-
   }
 }
-
-

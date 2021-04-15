@@ -1,6 +1,6 @@
 //会员中心页面
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_shop/provider/user_info_provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,21 +11,20 @@ class MemberPage extends StatefulWidget {
   _MemberPageState createState() => _MemberPageState();
 }
 
-class _MemberPageState extends State<MemberPage> with SingleTickerProviderStateMixin {
+class _MemberPageState extends State<MemberPage>
+    with SingleTickerProviderStateMixin {
+  // AnimationController _controller;
 
+  // @override
+  // void initState() {
+  //   _controller = AnimationController(vsync: this);
+  //   super.initState();
+  // }
 
-  AnimationController _controller;
-
-  @override
-  void initState() {
-    _controller = AnimationController(vsync: this);
-    super.initState();
-  }
   @override
   Widget build(BuildContext context) {
-
-    Map userInfoList =
-        Provider.of<UserInfoP>(context, listen: false).userInfoList;
+    Map userInfoList = Provider.of<UserInfoP>(context).userInfoList;
+    // setState(() {});
 
     print(userInfoList);
     return Scaffold(
@@ -61,10 +60,12 @@ class _MemberPageState extends State<MemberPage> with SingleTickerProviderStateM
                         margin: EdgeInsets.only(left: 15, top: 50),
                         child: InkWell(
                           child: Text(
-                            userInfoList.isEmpty
+                            Provider.of<UserInfoP>(context).userInfoList.isEmpty
                                 ? '立即登录'
                                 : '欢迎您,' +
-                                userInfoList["userInfo"][0]["username"],
+                                    Provider.of<UserInfoP>(
+                                      context,
+                                    ).userInfoList["userInfo"][0]["username"],
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: ScreenUtil().setSp(40)),
@@ -96,7 +97,6 @@ class _MemberPageState extends State<MemberPage> with SingleTickerProviderStateM
   }
 }
 
-
 class memberMain extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -117,52 +117,47 @@ class memberMain extends StatelessWidget {
               style: TextStyle(fontSize: ScreenUtil().setSp(30)),
             ),
           ),
-          // ticketList()
+          ticketList()
         ],
       ),
     );
   }
 }
 
-// class ticketList extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     Map _userInfoList =
-//         Provider.of<UserInfoP>(context, listen: false).userInfoList;
-//     int length = 1;
-//     if (!_userInfoList.isEmpty) {
-//       length = _userInfoList["seatInfo"].length == 0
-//           ? 1
-//           : _userInfoList["seatInfo"].length;
-//     }
-//     return Container(
-//         height: ScreenUtil().setHeight(500),
-//         child: ListView.builder(
-//           itemCount: length,
-//           itemBuilder: (context, index) {
-//             Widget a = Text(_userInfoList.toString());
-//             if (!_userInfoList.isEmpty) {
-//               // debugger();
-//               if (_userInfoList["seatInfo"].length == 0) {
-//                 // a = Text(
-//                 //     Provider.of<UserInfoP>(context, listen: false).textMsg);
-//                 return Container(
-//                   child: a,
-//                 );
-//               } else {
-//                 a = Text('12');
-//                 return Text('123');
-//               }
-//             }
-//             return a;
-//           },
-//         ));
-//   }
-// }
-
-
-
-
+class ticketList extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    Map _userInfoList = Provider.of<UserInfoP>(context).userInfoList;
+    int length = 1;
+    if (!_userInfoList.isEmpty) {
+      length = _userInfoList["seatInfo"].length == 0
+          ? 1
+          : _userInfoList["seatInfo"].length;
+    }
+    return Container(
+        height: ScreenUtil().setHeight(500),
+        child: ListView.builder(
+          itemCount: length,
+          itemBuilder: (context, index) {
+            Widget a = Text(_userInfoList.toString());
+            if (!_userInfoList.isEmpty) {
+              // debugger();
+              if (_userInfoList["seatInfo"].length == 0) {
+                // a = Text(
+                //     Provider.of<UserInfoP>(context, listen: false).textMsg);
+                return Container(
+                  child: a,
+                );
+              } else {
+                a = Text('12');
+                return Text('123');
+              }
+            }
+            return a;
+          },
+        ));
+  }
+}
 
 // child: Column(
 //       children: [

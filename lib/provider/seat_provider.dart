@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_shop/model/seat_model.dart';
 import 'dart:convert';
 import 'package:flutter_shop/service/service_method.dart';
+
 class SeatP with ChangeNotifier {
   List<Seat_provider> _goodsList = [];
 
@@ -14,7 +15,7 @@ class SeatP with ChangeNotifier {
     // _movieId = id?id:_movieId;
     await myGetRequest('http://49.234.103.109:18080/selectThisEMovieSeat' +
             '?movieId=' +
-        id)
+            id)
         .then((value) {
       data = json.decode(value.toString());
       _allList = data['data']['name'];
@@ -33,23 +34,20 @@ class SeatP with ChangeNotifier {
   increment() {
     notifyListeners();
   }
+
   //选择或取消座位
-  choseSeat(String id){
+  choseSeat(String id) {
     this._seatList.forEach((element) {
-      if (element['seatId']==id) {
-        if (element['status']==0) {
+      if (element['seatId'] == id) {
+        if (element['status'] == 0) {
           element['status'] = 1;
-        }  else{
+        } else {
           element['status'] = 0;
         }
       }
     });
   }
 
-
   get allList => _allList;
   get seatList => _seatList;
-
 }
-
-
