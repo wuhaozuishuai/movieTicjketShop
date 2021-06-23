@@ -7,11 +7,13 @@ const servicePath = {
 };
 
 const myServiceUrl = 'http://49.234.103.109:18080/';
+// const myServiceUrl = 'http://127.0.0.1:8081/';
 const myServicePath = {
   'index': myServiceUrl + 'index', //所有电影内容
   'floor': myServiceUrl + 'floor', //首页
   'selectMovie': myServiceUrl + 'selectMovie', //搜索电影
   'selectAllMovie': myServiceUrl + 'selectAllMovie', //全部电影
   'login': myServiceUrl + 'login', //登录
-  'selectUser': myServiceUrl + 'selectUser' //查询用户信息
+  'selectUser': myServiceUrl + 'selectUser', //查询用户信息
+  'choseTicket': myServiceUrl + 'choseTicket'
 };

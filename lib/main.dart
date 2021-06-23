@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import './pages/index_page.dart';
+import 'package:flutter_shop/pages/publicWidget/splash.dart';
 import 'package:provider/provider.dart';
 import './provider/counter.dart';
-import './provider/child_category.dart';
+
 import './provider/category_goods_list.dart';
 import './provider/seat_provider.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter_shop/routers/application.dart';
 import 'package:flutter_shop/routers/routers.dart';
-import 'package:flutter_shop/pages/login_page.dart';
+
 import 'package:flutter_shop/provider/user_info_provider.dart';
 
 void main() {
@@ -50,6 +51,7 @@ class MyApp extends StatelessWidget {
         title: 'fly电影',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(primaryColor: Color.fromRGBO(240, 60, 55, 1)),
+        // home: SpalashPage(),
         home: IndexPage(),
         // home: RootPage(),
       ),

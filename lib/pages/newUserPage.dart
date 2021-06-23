@@ -1,10 +1,12 @@
-import 'package:cached_network_image/cached_network_image.dart';
+// import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_shop/res/assets.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_shop/provider/user_info_provider.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_shop/pages/login_page.dart';
+import '../provider/seat_provider.dart';
+import 'package:flutter_screenutil/screenutil.dart';
 
 class ProfileEightPage extends StatelessWidget {
   static final String path = "lib/src/pages/profile/profile8.dart";
@@ -37,9 +39,9 @@ class ProfileEightPage extends StatelessWidget {
                     color: Colors.white,
                     shape: CircleBorder(),
                     elevation: 0,
-                    child: Icon(Icons.edit),
+                    child: Icon(Icons.escalator),
                     onPressed: () {
-                      print('123');
+                      print('1235');
                     },
                   )
                 ],
@@ -137,7 +139,25 @@ class UserInfo extends StatelessWidget {
                 ],
               ),
             ),
-          )
+          ),
+          Container(
+            padding: const EdgeInsets.only(left: 8.0, bottom: 4.0),
+            alignment: Alignment.topLeft,
+            child: Text(
+              "电影信息",
+              style: TextStyle(
+                color: Colors.black87,
+                fontWeight: FontWeight.w500,
+                fontSize: 16,
+              ),
+              textAlign: TextAlign.left,
+            ),
+          ),
+          Provider.of<UserInfoP>(context, listen: false)
+                      .userInfoList['seatInfo'] ==
+                  null
+              ? Text('')
+              : selectedView()
         ],
       ),
     );
@@ -273,6 +293,76 @@ class Avatar extends StatelessWidget {
           backgroundImage: image,
         ),
       ),
+    );
+  }
+}
+
+class selectedView extends StatelessWidget {
+  // const selectedView({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    String name = Provider.of<SeatP>(context).allList;
+    var list = Provider.of<UserInfoP>(
+      context,
+    ).userInfoList['seatInfo'];
+    print(list);
+    int pp = 0;
+    list.forEach((element) {
+      pp = pp + int.parse(element['price']);
+    });
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          list.length == 0 ? '' : '总数：${list.length}张  总金额：${pp}',
+          style: TextStyle(
+              color: Color.fromRGBO(240, 60, 55, 1),
+              fontSize: ScreenUtil().setSp(25)),
+        ),
+        Container(
+          // width: ScreenUtil().setWidth(700),
+          margin: EdgeInsets.only(top: 20),
+          height: ScreenUtil().setHeight(200),
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: list.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Container(
+                  width: 300,
+                  height: 100,
+                  child: Card(
+                      child: Container(
+                    height: 100,
+                    child: Column(
+                      // mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        ListTile(
+                          leading: Icon(Icons.album),
+                          title: Text(
+                            '${name}',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          subtitle: Column(
+                            children: [
+                              Container(
+                                  margin: EdgeInsets.only(top: 5),
+                                  child: Text(
+                                      '${list[index]["row"]}排${list[index]["column"]}列。价格：${list[index]["price"]} ')),
+                              Container(
+                                child: Text('${list[index]["playTime"]}'),
+                                margin: EdgeInsets.only(top: 5),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  )));
+            },
+          ),
+        )
+      ],
     );
   }
 }

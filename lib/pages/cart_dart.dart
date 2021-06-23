@@ -1,11 +1,20 @@
 //选座
+import 'dart:convert';
+// import 'dart:html';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+// import 'package:flutter_shop/service/service_method.dart';
 import 'package:provider/provider.dart';
 import '../provider/seat_provider.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:flutter_shop/pages/seat_view.dart';
-import 'package:flutter_shop/pages/column_l_i.dart';
+// import 'package:flutter_shop/pages/publicWidget/column_l_i.dart';
+import 'package:flutter_shop/provider/user_info_provider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:dio/dio.dart';
+// import 'dart:io';
+// import 'package:flutter_shop/pages/login_page.dart';
+// import 'package:flutter/services.dart';
 
 class CartPage extends StatefulWidget {
   @override
@@ -19,12 +28,15 @@ class _CartPageState extends State<CartPage> {
     List _list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
     return Scaffold(
       appBar: AppBar(
-        // leading: new IconButton(
-        //   icon: new Icon(Icons.arrow_back_ios),
-        //   onPressed: () => {
-        //     // Navigator.of(context).pop()
-        //     },
-        // ),
+        leading: new IconButton(
+          icon: new Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Provider.of<SeatP>(context, listen: false).emptyChose();
+            Navigator.of(
+              context,
+            ).pop();
+          },
+        ),
         title: Text('${Provider.of<SeatP>(context).allList}'),
       ),
       body: Center(
@@ -60,13 +72,90 @@ class _CartPageState extends State<CartPage> {
                       },
                     )),
                 // ColumnLI(),
+
                 SeatView(),
               ],
             ),
-            bottomIntro()
+            // selectedView(),
+            selectedView(),
+            bottomIntro(),
           ],
         ),
       )),
+    );
+  }
+}
+
+class selectedView extends StatelessWidget {
+  // const selectedView({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    String name = Provider.of<SeatP>(context).allList;
+    List<Map> list = Provider.of<SeatP>(context).choseList;
+    int pp = 0;
+    list.forEach((element) {
+      pp = pp + int.parse(element['price']);
+    });
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          list.length == 0 ? '' : '总数：${list.length}张  总金额：${pp}',
+          style: TextStyle(
+              color: Color.fromRGBO(240, 60, 55, 1),
+              fontSize: ScreenUtil().setSp(25)),
+        ),
+        Container(
+          // width: ScreenUtil().setWidth(700),
+          margin: EdgeInsets.only(top: 20),
+          height: ScreenUtil().setHeight(200),
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: list.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Container(
+                  width: 300,
+                  height: 100,
+                  child: Card(
+                      child: Container(
+                    height: 100,
+                    child: Column(
+                      // mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        ListTile(
+                          leading: Icon(Icons.album),
+                          title: Text(
+                            '${name}',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          subtitle: Column(
+                            children: [
+                              Container(
+                                  margin: EdgeInsets.only(top: 5),
+                                  child: Text(
+                                      '${list[index]["row"]}排${list[index]["column"]}列。价格：${list[index]["price"]} ')),
+                              Container(
+                                child: Text('${list[index]["playTime"]}'),
+                                margin: EdgeInsets.only(top: 5),
+                              ),
+                            ],
+                          ),
+                          trailing: InkWell(
+                            child: Icon(Icons.close),
+                            onTap: () => {
+                              Provider.of<SeatP>(context, listen: false)
+                                  .deleteChose(index)
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  )));
+            },
+          ),
+        )
+      ],
     );
   }
 }
@@ -95,7 +184,7 @@ class bottomIntro extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.only(top: 90),
+        // margin: EdgeInsets.only(top: 47),
         width: double.infinity,
         height: ScreenUtil().setHeight(100),
         decoration: BoxDecoration(
@@ -120,7 +209,85 @@ class bottomIntro extends StatelessWidget {
                   borderRadius: BorderRadius.circular(25),
                 ),
                 onPressed: () {
-                  print('11');
+                  if (Provider.of<SeatP>(context, listen: false)
+                      .choseList
+                      .isEmpty) {
+                    Fluttertoast.showToast(
+                        msg: "请选择座位",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.grey,
+                        textColor: Colors.white,
+                        fontSize: 16.0);
+                  } else {
+                    //购票
+                    showDialog<Null>(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: new Text('请扫描二维码付款'),
+                          content: new SingleChildScrollView(
+                            child: new ListBody(
+                              children: <Widget>[
+                                // new Text('内容 1'),
+                                //
+                                Image.asset(
+                                  "assets/images/pay.png",
+                                  height: 400,
+                                  width: 400,
+                                ),
+                              ],
+                            ),
+                          ),
+                          actions: <Widget>[
+                            new FlatButton(
+                              child: new Text('已付款'),
+                              onPressed: () async {
+                                List resq =
+                                    Provider.of<SeatP>(context, listen: false)
+                                        .choseList;
+                                resq.forEach((element) {
+                                  element["userId"] = Provider.of<UserInfoP>(
+                                          context,
+                                          listen: false)
+                                      .userInfoList["userInfo"][0]['id'];
+                                  element["forUsername"] =
+                                      Provider.of<UserInfoP>(context,
+                                                  listen: false)
+                                              .userInfoList["userInfo"][0]
+                                          ['username'];
+                                  element["status"] = 1;
+                                });
+
+                                Response response;
+                                response = await Dio().post(
+                                    "http://49.234.103.109:18080/choseTicket",
+                                    data: json.encode(resq));
+                                Provider.of<SeatP>(context, listen: false)
+                                    .emptyChose();
+                                Provider.of<UserInfoP>(context, listen: false)
+                                    .userLogin(int.parse(Provider.of<UserInfoP>(
+                                            context,
+                                            listen: false)
+                                        .userInfoList["userInfo"][0]['id']));
+                                Navigator.of(context).pop();
+                                Fluttertoast.showToast(
+                                    msg: "购票成功",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.CENTER,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.green,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
                 },
               ),
             )

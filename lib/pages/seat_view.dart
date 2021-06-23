@@ -1,9 +1,14 @@
+// import 'dart:developer';
+// import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../provider/seat_provider.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:like_button/like_button.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_shop/provider/user_info_provider.dart';
+import 'package:flutter_shop/pages/login_page.dart';
 
 class SeatView extends StatefulWidget {
   @override
@@ -28,28 +33,17 @@ class _SeatViewState extends State<SeatView>
 
   @override
   Widget build(BuildContext context) {
-    List<Map> _list = Provider.of<SeatP>(context).seatList;
-    print(_list);
+    List<Map> _list = Provider.of<SeatP>(context, listen: false).seatList;
+    // print(_list);
     return Container(
       width: ScreenUtil().setWidth(700),
-      height: ScreenUtil().setHeight(ScreenUtil.screenHeight),
+      height: ScreenUtil().setHeight(800),
       // margin: EdgeInsets.only(left: 40),
       child: GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 10, crossAxisSpacing: 1, mainAxisSpacing: 1),
         itemCount: _list.length,
         itemBuilder: (context, index) {
-          // return InkWell(
-          //   onTap: () {
-          //     print('点击');
-          //   },
-          //   child: Icon(
-          //       IconData(0xe613, fontFamily: 'appIconFonts'),
-          //     size: ScreenUtil().setSp(50),
-          //     color: Colors.grey,
-          //   ),
-          // );
-
           return LikeButton(
             size: 30,
             likeBuilder: (bool isLiked) {
@@ -73,18 +67,57 @@ class _SeatViewState extends State<SeatView>
               //
               /// if failed, you can do nothing
               // return success? !isLiked:isLiked;
-              if (_list[index]['userId'] != null) {
+              //
+
+              if (Provider.of<UserInfoP>(context, listen: false)
+                  .userInfoList
+                  .isEmpty) {
                 Fluttertoast.showToast(
-                    msg: "有人啦",
+                    msg: "请登录后再试",
                     toastLength: Toast.LENGTH_SHORT,
                     gravity: ToastGravity.CENTER,
                     timeInSecForIosWeb: 1,
-                    backgroundColor: Colors.red,
+                    backgroundColor: Colors.grey,
                     textColor: Colors.white,
                     fontSize: 16.0);
-                print('you人');
+                return Navigator.push(
+                  context,
+                  new MaterialPageRoute(
+                    builder: (context) => RootPage(),
+                    //TextScreen()用于展示我们想要通过搜索到达的页面，
+                    //这里用到了构造函数传值。
+                  ),
+                );
               } else {
-                print(_list[index]);
+                if (_list[index]['userId'] != null) {
+                  Fluttertoast.showToast(
+                      msg: "有人啦",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.red,
+                      textColor: Colors.white,
+                      fontSize: 16.0);
+                  print('you人');
+                  return isLiked;
+                }
+                if (isLiked == false) {
+                  Provider.of<SeatP>(context, listen: false)
+                      .addChose(_list[index]);
+                  print(Provider.of<SeatP>(context, listen: false).choseList);
+                  print('1');
+                } else {
+                  // String index = _list[index]
+                  Provider.of<SeatP>(context, listen: false)
+                      .deleteChoseById(_list[index]['seatid']);
+                  print('2');
+                }
+
+                // print(Provider.of<SeatP>(context, listen: false).choseList);
+                // String i = 'dsfs';
+                // i = i + 'sda0';
+                // print(!isLiked);
+                await Future.delayed(Duration(milliseconds: 300));
                 return !isLiked;
               }
             },
@@ -94,15 +127,15 @@ class _SeatViewState extends State<SeatView>
     );
   }
 
-  Future<bool> onLikeButtonTapped(bool isLiked) async {
-    /// send your request here
-    // final bool success= await sendRequest();
+  // Future<bool> onLikeButtonTapped(bool isLiked) async {
+  //   /// send your request here
+  //   // final bool success= await sendRequest();
 
-    /// if failed, you can do nothing
-    // return success? !isLiked:isLiked;
-    print('123');
-    return !isLiked;
-  }
+  //   /// if failed, you can do nothing
+  //   // return success? !isLiked:isLiked;
+  //   print('123');
+  //   return !isLiked;
+  // }
 }
 
 // class MemberPage extends StatelessWidget {

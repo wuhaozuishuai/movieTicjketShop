@@ -47,6 +47,28 @@ Future request(url, {formData}) async {
   }
 }
 
+Future request22(url, {formData}) async {
+  try {
+    print('开始获取数据');
+    Response response;
+    Dio dio = new Dio();
+    dio.options.contentType = ContentType.parse("application/json").toString();
+    if (formData != null) {
+      response = await dio.post(servicePath[url], data: formData);
+    } else {
+      response = await dio.post(servicePath[url]);
+    }
+
+    if (response.statusCode == 200) {
+      return response.data;
+    } else {
+      throw Exception('后端接口异常'); //主动抛出异常
+    }
+  } catch (e) {
+    return print('Error:=======>${e}');
+  }
+}
+
 Future myRequest(url, {formData}) async {
   try {
     print('开始获取MY数据');
